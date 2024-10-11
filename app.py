@@ -21,6 +21,7 @@ app = DashProxy(
     )
 
 app.config.suppress_callback_exceptions = True
+server = app.server
 
 def get_icon(icon):
     return DashIconify(icon=icon, height=16)
