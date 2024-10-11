@@ -1,9 +1,10 @@
-plotly==5.24.1
 dash
-dash-extensions
 dash-bootstrap-components
 dash-core-components
+dash-extensions
+dash-iconify
 dash-mantine-components
-pandas
-numpy
 gunicorn
+numpy
+pandas
+plotly==5.24.1
