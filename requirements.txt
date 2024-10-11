@@ -1,5 +1,4 @@
 dash
-dash-bootstrap-components
 dash-core-components
 dash-extensions
 dash-iconify
