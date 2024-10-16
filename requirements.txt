@@ -1,9 +1,9 @@
-beautifulsoup4
 dash
 dash-core-components
 dash-extensions
 dash-iconify
 dash-mantine-components
+geopy
 groq
 gunicorn
 numpy
