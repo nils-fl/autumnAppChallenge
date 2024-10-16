@@ -48,7 +48,7 @@ def update_analytics_graph(df:pd.DataFrame):
     number_2_star = df[df['Award'] == '2 Stars'].shape[0]
     number_3_star = df[df['Award'] == '3 Stars'].shape[0]
 
-    cards = dmc.Stack([
+    cards = dmc.Flex([
             dmc.Card(
                 children=[
                     dmc.Center(
@@ -115,8 +115,9 @@ def update_analytics_graph(df:pd.DataFrame):
                 className="stats-card"
                 ),
             ],
+            direction={"base": "column", "md": "row"},
             align="center",
-            gap="xl",
+            gap="md",
             justify="space-between")
     return cards
 
@@ -325,11 +326,9 @@ layout = html.Div([
             position="left",
             size="lg",
         ),
-    dmc.Grid(children=[
-        dmc.GridCol(dmc.Card([dcc.Graph(style={"width": "100%"}, id="map-fig")], className="map-card"), span=10, miw=400),
-        dmc.GridCol(html.Div(id="stats"), span=2, miw=200),
-        ],
-        gutter="md"),
+    html.Div(id="stats"),
+    dmc.Space(h=20),
+    dmc.Card([dcc.Graph(style={"width": "100%"}, id="map-fig")], className="map-card"),
     dmc.Modal(
         id="restaurant-description",
         size="lg",
