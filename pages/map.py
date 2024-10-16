@@ -28,7 +28,7 @@ dash.register_page(
     path="/",
     name="Map")
 
-client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
+client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
 geolocator = Nominatim(user_agent="dash_challenge")
 geocode = RateLimiter(geolocator.geocode, min_delay_seconds=1)
