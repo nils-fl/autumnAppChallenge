@@ -328,9 +328,10 @@ layout = html.Div([
             size="lg",
         ),
     dmc.Grid(children=[
-        dmc.GridCol(html.Div(id="stats"), span=2),
-        dmc.GridCol(dmc.Card([dcc.Graph(style={"width": "100%"}, id="map-fig")], className="map-card"), span=10),
-    ], gutter="xl",),
+        dmc.GridCol(dmc.Card([dcc.Graph(style={"width": "100%"}, id="map-fig")], className="map-card"), span=10, miw=400),
+        dmc.GridCol(html.Div(id="stats"), span=2, miw=200),
+        ],
+        gutter="md"),
     dmc.Modal(
         id="restaurant-description",
         size="lg",
