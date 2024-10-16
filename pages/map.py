@@ -50,7 +50,7 @@ def update_analytics_graph(df:pd.DataFrame):
     number_2_star = df[df['Award'] == '2 Stars'].shape[0]
     number_3_star = df[df['Award'] == '3 Stars'].shape[0]
 
-    cards = dmc.Flex([
+    cards = dmc.Stack([
             dmc.Card(
                 children=[
                     dmc.Center(
@@ -117,9 +117,9 @@ def update_analytics_graph(df:pd.DataFrame):
                 className="stats-card"
                 ),
             ],
-            direction={"base": "column", "sm": "row"},
-            gap={"base": "sm", "sm": "lg"},
-            justify={"sm": "space-around"})
+            align="center",
+            gap="xl",
+            justify="space-between")
     return cards
 
 ######################################################################
@@ -129,23 +129,8 @@ def update_analytics_graph(df:pd.DataFrame):
 @callback(
     Output("map-fig", "figure"),
     Input("data-store", "data"),
-    Input("switch-3stars", "checked"),
-    Input("switch-2stars", "checked"),
-    Input("switch-1star", "checked"),
-    Input("switch-bib", "checked"),
-    Input("switch-selected", "checked"),
     )
-def update_map(df:pd.DataFrame, switch_3star:bool, switch_2stars:bool, switch_1star:bool, switch_bib:bool, switch_selected:bool):
-    if not switch_3star:
-        df = df[df['Award'] != '3 Stars']
-    if not switch_2stars:
-        df = df[df['Award'] != '2 Stars']
-    if not switch_1star:
-        df = df[df['Award'] != '1 Star']
-    if not switch_bib:
-        df = df[df['Award'] != 'Bib Gourmand']
-    if not switch_selected: 
-        df = df[df['Award'] != 'Selected Restaurants']
+def update_map(df:pd.DataFrame):
     dfs_awards = [df for _,df in df.groupby('Award', sort=False)]
     fig = go.Figure()
     for tmp in dfs_awards:
@@ -289,6 +274,8 @@ def get_alt_entry(row):
                 dmc.Badge(row['Award'], color="red"),
             ]),
             dmc.Text(f" in {row['city']}, {row['country']}", fw=300),
+            dmc.Space(h=10),
+            dcc.Link(dmc.Button("Get me there"), href=f"http://maps.google.com/maps?z=10&q={row['Latitude']},{row['Longitude']}", target="_blank"),
         ], className="alt-card")
     return entry
 
@@ -326,7 +313,6 @@ def update_map(n_clicks, click_data, df:pd.DataFrame):
 ######################################################################
 
 layout = html.Div([
-    html.Div(id="stats"),
     dmc.Drawer(
             id="plan-my-day-drawer",
             radius="10px",
@@ -341,20 +327,10 @@ layout = html.Div([
             position="left",
             size="lg",
         ),
-    dmc.Card([
-        dmc.Flex([
-            dmc.Switch(id="switch-3stars", label="3 Stars", checked=True),
-            dmc.Switch(id="switch-2stars", label="2 Stars", checked=True),
-            dmc.Switch(id="switch-1star", label="1 Star", checked=True),
-            dmc.Switch(id="switch-bib", label="Bib Gourmand", checked=True),
-            dmc.Switch(id="switch-selected", label="Selected Restaurants", checked=True),
-        ], 
-        className="map-flex",
-        direction={"base": "column", "sm": "row"},
-        gap={"base": "sm", "sm": "lg"},
-        justify={"sm": "start"}),
-        dcc.Graph(style={"width": "100%"}, id="map-fig"),
-        ], className="map-card"),
+    dmc.Grid(children=[
+        dmc.GridCol(html.Div(id="stats"), span=2),
+        dmc.GridCol(dmc.Card([dcc.Graph(style={"width": "100%"}, id="map-fig")], className="map-card"), span=10),
+    ], gutter="xl",),
     dmc.Modal(
         id="restaurant-description",
         size="lg",

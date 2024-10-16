@@ -48,6 +48,7 @@ def update_analytics_graph(df:pd.DataFrame, sort_by:str):
         rows=8,
         cols=1,
         shared_xaxes=True,
+        vertical_spacing=0.05,
         subplot_titles=[
             "3 Stars",
             "2 Stars",
@@ -165,6 +166,7 @@ sort_options = [["stars_3_sum", "Stars"], ["restaurants_count", "Restaurants"], 
 layout = html.Div([
     html.Div(
         [
+            dmc.Space(h=10),
             dmc.RadioGroup(
                 children=dmc.Group([dmc.Radio(l, value=k) for k,l in sort_options], my=10),
                 id="country-sort-by",
@@ -173,6 +175,7 @@ layout = html.Div([
                 size="sm",
                 mb=10,
             ),
+            dmc.Space(h=10),
             dmc.Text(id="radio-output"),
         ]
     ),

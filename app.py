@@ -91,7 +91,7 @@ app.layout = dmc.MantineProvider(
         dcc.Location(id="url", refresh="callback-nav"),
         dmc.AppShell(
             children=[
-                dmc.AppShellNavbar(get_nav_content(), zIndex=2000, w="8em", className="nav-left"),
+                dmc.AppShellNavbar(get_nav_content(), zIndex=2000, w="12em", className="nav-left"),
                 dmc.AppShellMain(children=page_container),
                 dcc.Store(id="data-store"),
             ]
