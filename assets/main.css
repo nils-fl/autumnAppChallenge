@@ -19,6 +19,10 @@ html, body {
     box-shadow: 3px 3px 20px -5px rgba(149, 165, 166,1.0);
 }
 
+.map-flex {
+    padding-left: 2em;
+}
+
 .nav-left {
     box-shadow: 3px 3px 20px -5px rgba(149, 165, 166,1.0);
 }
@@ -38,8 +42,16 @@ html, body {
     box-shadow: 3px 3px 20px -5px rgba(149, 165, 166,1.0);
     margin-bottom: 1em;
     text-align: center;
+    height: 10em;
 }
 
 .stats-card-hr {
     width: 66%;
+    margin: auto;
+}
+
+.alt-card {
+    border-radius: 10px;
+    box-shadow: 3px 3px 20px -5px rgba(149, 165, 166,1.0);
+    margin-bottom: 1em;
 }

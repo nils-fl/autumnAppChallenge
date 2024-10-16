@@ -1,11 +1,9 @@
 import dash_mantine_components as dmc
-import numpy as np
 import pandas as pd
 from dash import _dash_renderer
 from dash_extensions.enrich import (DashProxy, Input, Output, Serverside,
                                     ServersideOutputTransform, dcc, html,
                                     page_container)
-from dash_iconify import DashIconify
 
 from modules.country_map import *
 from modules.helpers import *
@@ -23,9 +21,6 @@ app = DashProxy(
 app.config.suppress_callback_exceptions = True
 server = app.server
 
-def get_icon(icon):
-    return DashIconify(icon=icon, height=16)
-
 def get_nav_content():
     return [
         dmc.Image(
@@ -41,6 +36,11 @@ def get_nav_content():
             href="/analytics_countries",
             leftSection=get_icon("mdi:analytics"),
             label="Countries",
+        ),
+        dmc.NavLink(
+            href="/analytics_cuisines",
+            leftSection=get_icon("mdi:analytics"),
+            label="Cuisines",
         ),
     ]
 
