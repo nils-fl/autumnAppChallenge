@@ -293,7 +293,7 @@ def update_map(n_clicks, click_data, df:pd.DataFrame):
         lat = df[df['Name'] == name]['Latitude'].iloc[0]
         
         df = df[df.Name!=name].copy()
-        df["distance"] = df.apply(lambda x: distance.distance((lat, long), (x['Latitude'], x['Longitude'])).km, axis=1)
+        df["distance"] = df.apply(lambda x: distance.great_circle((lat, long), (x['Latitude'], x['Longitude'])).km, axis=1)
         df = df.sort_values("distance")[:5]
         
         children = [
