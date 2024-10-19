@@ -287,7 +287,7 @@ def update_map(n_clicks, click_data):
 # Drawer Alternatives
 ######################################################################
 
-def get_alt_entry(row):
+def get_alt_entry(row, i):
     entry = dmc.Card(
         children=[
             dmc.Group([
@@ -298,7 +298,12 @@ def get_alt_entry(row):
             ]),
             dmc.Text(f" in {row['city']}, {row['country']}", fw=300),
             dmc.Space(h=10),
-            dcc.Link(dmc.Button("Get me there"), href=f"http://maps.google.com/maps?z=10&q={row['Latitude']},{row['Longitude']}", target="_blank"),
+            dmc.Group([
+                dcc.Link(dmc.Button("Get me there"), href=f"http://maps.google.com/maps?z=10&q={row['Latitude']},{row['Longitude']}", target="_blank"),
+                dmc.Button("for the way", id=f"for-the-way-btn-{str(i)}", leftSection=DashIconify(icon="mdi:music", height=20), color="green"),
+                html.P(children=row["Name"], id=f"for-the-way-name-{str(i)}", hidden=True, n_clicks=0),
+                html.P(children=row["city"], id=f"for-the-way-city-{str(i)}", hidden=True, n_clicks=0),
+            ])
         ], className="alt-card")
     return entry
 
@@ -318,18 +323,85 @@ def update_map(n_clicks, click_data, df:pd.DataFrame):
         
         df = df[df.Name!=name].copy()
         df["distance"] = df.apply(lambda x: distance.great_circle((lat, long), (x['Latitude'], x['Longitude'])).km, axis=1)
-        df = df.sort_values("distance")[:5]
+        df = df.sort_values("distance")[:5].reset_index(drop=True)
         
         children = [
             dmc.Text(f"Alternatives to {name.title()}", fw=700),
             dmc.Space(h=20),
             html.Hr(),
             dmc.Space(h=20),
-            *[get_alt_entry(row) for i,row in df.iterrows()],
+            *[get_alt_entry(row, i) for i,row in df.iterrows()],
         ]
         return True, children
     else:
         return False, no_update
+
+######################################################################
+# Music Modal
+######################################################################
+
+def get_music_children(name, city):
+    chat_completion = client.chat.completions.create(
+        messages=[
+            {
+                "role": "user",
+                "content": (f"Please recommend 3 songs that would be great to listen on my trip to {city}"
+                            f" where I will eat at the restaurant named {name}."
+                            f" Please return the recommendation as markdown."),
+            }
+        ],
+        model="llama3-8b-8192",
+    )
+    recommendation = chat_completion.choices[0].message.content
+    children = [
+        dmc.Text(f"Songs for my trip to {name.title()}", fw=700),
+        dmc.Space(h=20),
+        html.Hr(),
+        dmc.Space(h=20),
+        dcc.Markdown(recommendation),
+        dmc.Space(h=20),
+    ]
+    return children
+
+
+@callback(
+    Output("for-the-way-modal", "children"),
+    Output("for-the-way-modal", "opened"),
+    Input("for-the-way-btn-0", "n_clicks"),
+    Input("for-the-way-btn-1", "n_clicks"),
+    Input("for-the-way-btn-2", "n_clicks"),
+    Input("for-the-way-btn-3", "n_clicks"),
+    Input("for-the-way-btn-4", "n_clicks"),
+    Input("for-the-way-name-0", "children"),
+    Input("for-the-way-name-1", "children"),
+    Input("for-the-way-name-2", "children"),
+    Input("for-the-way-name-3", "children"),
+    Input("for-the-way-name-4", "children"),
+    Input("for-the-way-city-0", "children"),
+    Input("for-the-way-city-1", "children"),
+    Input("for-the-way-city-2", "children"),
+    Input("for-the-way-city-3", "children"),
+    Input("for-the-way-city-4", "children"),
+    prevent_initial_call=True,
+    )
+def update_map(n_clicks_0, n_clicks_1, n_clicks_2, n_clicks_3, n_clicks_4, name_0, name_1, name_2, name_3, name_4, city_0, city_1, city_2, city_3, city_4):
+    if n_clicks_0 and n_clicks_0 > 0:
+        children = get_music_children(name_0, city_0)
+        return children, True
+    elif n_clicks_1 and n_clicks_1 > 0:
+        children = get_music_children(name_1, city_1)
+        return children, True
+    elif n_clicks_2 and n_clicks_2 > 0:
+        children = get_music_children(name_2, city_2)
+        return children, True
+    elif n_clicks_3 and n_clicks_3 > 0:
+        children = get_music_children(name_3, city_3)
+        return children, True
+    elif n_clicks_4 and n_clicks_4 > 0:
+        children = get_music_children(name_4, city_4)
+        return children, True
+    else:
+        return no_update, False
 
 ######################################################################
 # Layout
@@ -356,6 +428,11 @@ layout = html.Div([
     dmc.Modal(
         id="restaurant-description",
         size="lg",
+        ),
+    dmc.Modal(
+        id="for-the-way-modal",
+        size="lg",
+        zIndex=2000,
         ),
     dcc.Store(id="click-data"),
 ])
