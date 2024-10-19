@@ -43,7 +43,7 @@ geocode = RateLimiter(geolocator.geocode, min_delay_seconds=1)
     )
 def update_analytics_graph(df:pd.DataFrame):
     number_of_countries = df["country"].nunique()
-    number_of_restaurants = df["Name"].nunique()
+    number_of_restaurants = len(df)
     number_1_star = df[df['Award'] == '1 Star'].shape[0]
     number_2_star = df[df['Award'] == '2 Stars'].shape[0]
     number_3_star = df[df['Award'] == '3 Stars'].shape[0]
@@ -79,11 +79,23 @@ def update_analytics_graph(df:pd.DataFrame):
                 children=[
                     dmc.Center(
                         dmc.Flex([
-                            DashIconify(icon="mdi:star", height=30),
-                            DashIconify(icon="mdi:star", height=30),
-                            DashIconify(icon="mdi:star", height=30),
+                            dmc.Image(
+                                src="https://upload.wikimedia.org/wikipedia/commons/a/ad/MichelinStar.svg",
+                                h=30,
+                            ),
+                            dmc.Space(w=5),
+                            dmc.Image(
+                                src="https://upload.wikimedia.org/wikipedia/commons/a/ad/MichelinStar.svg",
+                                h=30,
+                            ),
+                            dmc.Space(w=5),
+                            dmc.Image(
+                                src="https://upload.wikimedia.org/wikipedia/commons/a/ad/MichelinStar.svg",
+                                h=30,
+                            ),
                         ])
                     ),
+                    dmc.Text("Restaurants"),
                     html.Hr(className="stats-card-hr"),
                     dmc.Title(f"{number_3_star:,.0f}", order=1)
                     ],
@@ -93,10 +105,18 @@ def update_analytics_graph(df:pd.DataFrame):
                 children=[
                     dmc.Center(
                         dmc.Flex([
-                            DashIconify(icon="mdi:star", height=30),
-                            DashIconify(icon="mdi:star", height=30),
+                            dmc.Image(
+                                src="https://upload.wikimedia.org/wikipedia/commons/a/ad/MichelinStar.svg",
+                                h=30,
+                            ),
+                            dmc.Space(w=5),
+                            dmc.Image(
+                                src="https://upload.wikimedia.org/wikipedia/commons/a/ad/MichelinStar.svg",
+                                h=30,
+                            ),
                         ])
                     ),
+                    dmc.Text("Restaurants"),
                     html.Hr(className="stats-card-hr"),
                     dmc.Title(f"{number_2_star:,.0f}", order=1)
                     ],
@@ -106,9 +126,13 @@ def update_analytics_graph(df:pd.DataFrame):
                 children=[
                     dmc.Center(
                         dmc.Flex([
-                            DashIconify(icon="mdi:star", height=30),
+                            dmc.Image(
+                                src="https://upload.wikimedia.org/wikipedia/commons/a/ad/MichelinStar.svg",
+                                h=30,
+                            ),
                         ])
                     ),
+                    dmc.Text("Restaurants"),
                     html.Hr(className="stats-card-hr"),
                     dmc.Title(f"{number_1_star:,.0f}", order=1)
                     ],
