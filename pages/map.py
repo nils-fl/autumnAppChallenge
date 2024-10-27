@@ -205,7 +205,7 @@ def update_map(df:pd.DataFrame, click_data):
         city = df[df['Name'] == name]['city'].iloc[0]
         url = df[df['Name'] == name]['Url'].iloc[0]
         restaurant_url = df[df['Name'] == name]['WebsiteUrl'].iloc[0]
-        features = df[df['Name'] == name]['FacilitiesAndServices'].iloc[0].split(",")
+        features = df[df['Name'] == name]['FacilitiesAndServices'].iloc[0].split(",") if len(df[df['Name'] == name]['FacilitiesAndServices'].iloc[0]) > 2 else []
 
         children = [
             dmc.Card(
