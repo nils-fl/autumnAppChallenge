@@ -7,7 +7,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 import plotly.io as pio
 from dash_extensions.enrich import (Input, Output, Serverside, callback, dcc,
-                                    html, no_update)
+                                    html, no_update, clientside_callback)
 from dotenv import load_dotenv
 from geopy import distance
 from geopy.extra.rate_limiter import RateLimiter
@@ -205,6 +205,7 @@ def update_map(df:pd.DataFrame, click_data):
         city = df[df['Name'] == name]['city'].iloc[0]
         url = df[df['Name'] == name]['Url'].iloc[0]
         restaurant_url = df[df['Name'] == name]['WebsiteUrl'].iloc[0]
+        features = df[df['Name'] == name]['FacilitiesAndServices'].iloc[0].split(",")
 
         children = [
             dmc.Card(
@@ -215,12 +216,25 @@ def update_map(df:pd.DataFrame, click_data):
                         dmc.Center(dmc.Text(name.title(), fw=700))
                         ], h=60
                     ),
-                    dmc.Space(h=20),
+                    dmc.Space(h=40),
                     html.Hr(),
+                    dmc.Flex([
+                        dmc.Badge(f"{df[df['Name'] == name]['Award'].iloc[0]}", color="red")
+                    ],
+                    justify={"sm": "center"},
+                    wrap="wrap"),
                     dmc.Space(h=20),
                     dmc.Text(desc),
                     dmc.Space(h=20),
                     html.Hr(),
+                    dmc.Flex([
+                        dmc.Badge(f, color="green") for f in features
+                    ],
+                    direction={"base": "column", "sm": "row"},
+                    gap={"base": "sm", "sm": "lg"},
+                    justify={"sm": "center"},
+                    wrap="wrap"
+                    ),
                     dmc.Space(h=20),
                     dmc.Stack([
                         dmc.Flex([

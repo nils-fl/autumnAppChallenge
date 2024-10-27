@@ -46,15 +46,16 @@ def get_nav_content():
 
 def size_mapping(award):
     if award == '3 Stars':
-        return 30
+        return 25
     elif award == '2 Stars':
-        return 15
+        return 20
     elif award == '1 Star':
-        return 10
+        return 15
     elif award == 'Bib Gourmand':
-        return 5
+        return 7
     else:
-        return 2
+        return 5
+
 
 def get_stars(award):
     if award == '3 Stars':
