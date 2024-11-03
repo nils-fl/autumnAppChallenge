@@ -18,7 +18,7 @@ colors = [*colors * 100]
 dash.register_page(
     __name__,
     path="/analytics_cuisines",
-    name="Cousines")
+    name="Cuisines")
 
 ######################################################################
 # subplot
