@@ -5,6 +5,7 @@ dash-iconify
 dash-mantine-components
 geopy
 groq
+gunicorn
 numpy
 pandas
 plotly==5.24.1
